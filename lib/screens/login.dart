@@ -4,7 +4,7 @@ import 'package:mvvm_test/widgets/change_screen.dart';
 import '../widgets/mybutton.dart';
 
 class Login extends StatefulWidget {
-  Login({Key? key}) : super(key: key);
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -47,6 +47,7 @@ class _LoginState extends State<Login> {
                             fontSize: 50, fontWeight: FontWeight.bold),
                       ),
                       TextFormField(
+                        onChanged: (value) {},
                         validator: (value) {
                           if (value == "") {
                             return "Please fill this field";
@@ -108,7 +109,7 @@ class _LoginState extends State<Login> {
                           onTap: () {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: ((context) => SignUp()),
+                                builder: ((context) => const SignUp()),
                               ),
                             );
                           },

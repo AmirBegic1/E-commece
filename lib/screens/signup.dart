@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mvvm_test/screens/login.dart';
 import 'package:mvvm_test/widgets/change_screen.dart';
 import 'package:mvvm_test/widgets/mybutton.dart';
@@ -12,15 +14,21 @@ class SignUp extends StatefulWidget {
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 bool obserText = true;
+var email;
+var password;
 
 class _SignUpState extends State<SignUp> {
-  void validation() {
-    final FormState? form = _formKey.currentState;
-    if (form!.validate()) {
-      print("Yes");
-    } else {
-      print("No");
-    }
+  void validation() async {
+    final FormState? _form = _formKey.currentState;
+    if (!_form!.validate()) {
+      try {
+        UserCredential result = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        print(result.user!.uid);
+      } on PlatformException catch (e) {
+        print(e.message.toString());
+      }
+    } else {}
   }
 
   @override
@@ -74,6 +82,11 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          email = value;
+                        });
+                      },
                       validator: (value) {
                         if (value == "") {
                           return "Please fill this field";
@@ -87,6 +100,11 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          password = value;
+                        });
+                      },
                       obscureText: obserText,
                       validator: (value) {
                         if (value == "") {
@@ -132,7 +150,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     MyButton(
-                      name: "Sign In",
+                      name: "Sign Up",
                       onPressed: () {
                         validation();
                       },

@@ -4,7 +4,7 @@ class ChangeScreen extends StatelessWidget {
   final String whichAccount;
   final VoidCallback onTap;
   final String name;
-  ChangeScreen(
+  const ChangeScreen(
       {required this.whichAccount, required this.onTap, required this.name});
 
   @override
