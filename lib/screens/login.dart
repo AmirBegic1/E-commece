@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mvvm_test/screens/signup.dart';
 import 'package:mvvm_test/widgets/change_screen.dart';
 import '../widgets/mybutton.dart';
@@ -11,13 +13,21 @@ class Login extends StatefulWidget {
 }
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-void validation() {
-  final FormState? form = _formKey.currentState;
-  if (form!.validate()) {
-    print("Yes");
-  } else {
-    print("No");
-  }
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+var email;
+var password;
+
+void validation() async {
+  final FormState? _form = _formKey.currentState;
+  if (!_form!.validate()) {
+    try {
+      UserCredential result = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      print(result.user?.uid);
+    } on PlatformException catch (e) {
+      print(e.message.toString());
+    }
+  } else {}
 }
 
 bool obserText = true;
@@ -47,7 +57,11 @@ class _LoginState extends State<Login> {
                             fontSize: 50, fontWeight: FontWeight.bold),
                       ),
                       TextFormField(
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          setState(() {
+                            email = value;
+                          });
+                        },
                         validator: (value) {
                           if (value == "") {
                             return "Please fill this field";
@@ -67,6 +81,11 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       TextFormField(
+                        onChanged: (value) {
+                          setState(() {
+                            password = value;
+                          });
+                        },
                         obscureText: obserText,
                         validator: (value) {
                           if (value == "") {

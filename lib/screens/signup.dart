@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:mvvm_test/screens/login.dart';
 import 'package:mvvm_test/widgets/change_screen.dart';
@@ -13,6 +14,7 @@ class SignUp extends StatefulWidget {
 }
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 bool obserText = true;
 var email;
 var password;
@@ -24,7 +26,7 @@ class _SignUpState extends State<SignUp> {
       try {
         UserCredential result = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
-        print(result.user!.uid);
+        print(result.user?.uid);
       } on PlatformException catch (e) {
         print(e.message.toString());
       }
